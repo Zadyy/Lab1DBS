@@ -1,0 +1,82 @@
+/* DROP TABLE "list_of_devs", "user_log", "salary_log", "user_support", "user_payment_log", "software_product", "users", "workers"; */
+
+CREATE TABLE workers(
+    worker_id CHAR(5),
+    worker_first_name VARCHAR(50),
+    worker_last_name VARCHAR(50),
+    POSITION VARCHAR(30),
+    phone_no CHAR(8),
+    salary real,
+    STATUS BOOLEAN,
+    gender char(2),
+    mail varchar(50),
+    address varchar(200),
+    PRIMARY KEY (worker_id)
+);
+
+CREATE TABLE users(
+    user_id CHAR(5),
+    user_name VARCHAR(100),
+    user_type VARCHAR(8),
+    registry_date DATE,
+    phone_no CHAR(8),
+    mail varchar(50),
+    PRIMARY KEY (user_id)
+); 
+
+CREATE TABLE software_product(
+    software_id CHAR(4),
+    software_name VARCHAR(50),
+    no_of_active_devs INT,
+    begin_date DATE,
+    software_type VARCHAR(20),
+	PRIMARY KEY (software_id)
+); 
+
+CREATE TABLE salary_log(
+    worker_id CHAR(5),
+    salary_amount REAL,
+    bank_account INT,
+    bank_type VARCHAR(50),
+    account_name VARCHAR(100),
+    transaction_date DATE,
+    STATUS BOOLEAN,
+    FOREIGN KEY (worker_id) REFERENCES workers(worker_id)
+);
+
+CREATE TABLE list_of_devs(
+    software_id CHAR(4),
+    worker_id CHAR(5),
+    team_pos VARCHAR(50),
+    FOREIGN KEY (software_id) REFERENCES software_product(software_id),
+    FOREIGN KEY (worker_id) REFERENCES workers(worker_id)
+); 
+
+CREATE TABLE user_log(
+    software_id CHAR(4),
+    user_id CHAR(5),
+    date_of_subs DATE,
+    STATUS BOOLEAN,
+    FOREIGN KEY (software_id) REFERENCES software_product(software_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE user_payment_log(
+    software_id CHAR(4),
+    user_id CHAR(5),
+    amount REAL,
+    payment_date DATE,
+    payment_id VARCHAR(16),
+    FOREIGN KEY (software_id) REFERENCES software_product(software_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE user_support(
+    worker_id CHAR(4),
+    user_id CHAR(5),
+    problem_detail VARCHAR(1000),
+    COMMENT VARCHAR(1000),
+    STATUS BOOLEAN,
+    FOREIGN KEY (worker_id) REFERENCES workers(worker_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
